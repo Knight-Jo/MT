@@ -170,6 +170,7 @@ void DeviceFinder::startUdpListener()
             qDebug() << "Udp received :" << datagram.data();
             if (datagram == HEARTBEAT) {
                 udpSocket->writeDatagram(EXIT_MESSAGE, sender, senderPort);
+                emit DeviceFinder::deviceFound(sender.toString());
             }
         }
     });
@@ -181,7 +182,7 @@ void DeviceFinder::handleTcpConnection()
     qDebug() << "Tcp connection";
     isconnected=true;
     QTimer *heartbeatTimer = new QTimer(client);
-    connect(client, &QTcpSocket::readyRead, [client, heartbeatTimer]() {
+    connect(client, &QTcpSocket::readyRead, [&, client, heartbeatTimer]() {
         heartbeatTimer->start(60000);
         QHostAddress clientAddr = QHostAddress(client->peerAddress().toIPv4Address());
         qDebug()<<"client ip: " <<clientAddr << " port: " << client->peerPort();
@@ -189,7 +190,9 @@ void DeviceFinder::handleTcpConnection()
         qDebug() << "TCP recevied message: " << data;
         if (data == HEARTBEAT) {
             client->write(EXIT_MESSAGE);
+            emit DeviceFinder::deviceFound(client->peerAddress().toString());
         }
+
     });
 
     connect(heartbeatTimer, &QTimer::timeout, [client]() {

@@ -90,7 +90,7 @@ public slots:
     void startListening();
 
 signals:
-    void deviceFound(int method);
+    void deviceFound(QString ip);
 
 private:
     void startBroadcast();

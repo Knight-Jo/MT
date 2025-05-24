@@ -35,10 +35,15 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << "Frequency:" << dlg.frequency();
     }
 
-    finder = new DeviceFinder(method, ipAddress, tcpPort, udpPort, targetUdpPort, this);
+    finder = new DeviceFinder(method, ipAddress, tcpPort, udpPort, targetUdpPort);
     QTimer::singleShot(0, finder, &DeviceFinder::startDiscovery);
     QTimer::singleShot(0, finder, &DeviceFinder::startListening);
 
+    QTimer::connect(finder, &DeviceFinder::deviceFound, [&](QString ip){
+        qDebug()<< "deviceFound main: " << ip ;
+        finder->disconnect();
+        finder->deleteLater();
+    });
 }
 MainWindow::~MainWindow()
 {
