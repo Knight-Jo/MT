@@ -33,32 +33,10 @@ int main(int argc, char *argv[])
 
     DeviceFinder finder;
     ConnectionHandler handler;
-
-    QThread finderThread;
-    QThread handlerThread;
-
-    finder.moveToThread(&finderThread);
-    handler.moveToThread(&handlerThread);
-
-    QObject::connect(&finderThread, &QThread::started, [&]() {
+    QTimer::singleShot(0, &finder, [&](){
         finder.startDiscovery(method, ipaddress);
     });
-
-    QObject::connect(&handlerThread, &QThread::started, &handler, &ConnectionHandler::startListening);
-
-    QObject::connect(&handler, &ConnectionHandler::connectionSuccess,
-                     &finder, &DeviceFinder::stopDiscovery, Qt::QueuedConnection);
-
-
-
-    finderThread.start();
-    handlerThread.start();
-
-    // 确保线程结束后自动清理
-    QObject::connect(&finderThread, &QThread::finished,
-                     &finderThread, &QObject::deleteLater);
-    QObject::connect(&handlerThread, &QThread::finished,
-                     &handlerThread, &QObject::deleteLater);
+    QTimer::singleShot(0, &finder, &DeviceFinder::startListening);
 
     return a.exec();
 }

@@ -15,8 +15,9 @@ void DeviceFinder::stopDiscovery()
 {
     qDebug()<<"----Stop Discovery----" ;
     isconnected = true;
-    tcpServer->deleteLater();
-    udpSocket->deleteLater();
+    // tcpServer->deleteLater();
+    // udpSocket->deleteLater();
+
 }
 
 
@@ -168,6 +169,7 @@ void DeviceFinder::handleTcpConnection()
 {
     QTcpSocket *client = tcpServer->nextPendingConnection();
     qDebug() << "Tcp connection";
+    isconnected=true;
     QTimer *heartbeatTimer = new QTimer(client);
     connect(client, &QTcpSocket::readyRead, [client, heartbeatTimer]() {
         heartbeatTimer->start(60000);

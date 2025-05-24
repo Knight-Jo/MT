@@ -22,8 +22,8 @@ constexpr quint16 UDP_TARGET_PORT = 9910;
 constexpr quint16 UDP_LISTEN_PORT = 68;
 constexpr quint16 TCP_LISTEN_PORT = 80;
 const QByteArray MESSAGE = "Hello, Device! From Finder!";
-const QByteArray SERVICE_TYPE = "_http._tcp.local.";
-const QByteArray SERVICE_NAME = "JumpWDevice._http._tcp.local.";
+const QByteArray SERVICE_TYPE = "_test._tcp.local.";
+const QByteArray SERVICE_NAME = "JumpWDevice";
 
 class NetworkUtils {
 public:
