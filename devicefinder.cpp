@@ -168,8 +168,8 @@ void DeviceFinder::startUdpListener()
             udpSocket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
             qDebug() << "Udp client ip: " << sender << " port: " <<senderPort;
             qDebug() << "Udp received :" << datagram.data();
-            if (datagram == "heartbeat") {
-                udpSocket->writeDatagram("heartbeat", sender, senderPort);
+            if (datagram == HEARTBEAT) {
+                udpSocket->writeDatagram(EXIT_MESSAGE, sender, senderPort);
             }
         }
     });
@@ -187,8 +187,9 @@ void DeviceFinder::handleTcpConnection()
         qDebug()<<"client ip: " <<clientAddr << " port: " << client->peerPort();
         QByteArray data = client->readAll();
         qDebug() << "TCP recevied message: " << data;
-
-        client->write("heartbeat");
+        if (data == HEARTBEAT) {
+            client->write(EXIT_MESSAGE);
+        }
     });
 
     connect(heartbeatTimer, &QTimer::timeout, [client]() {

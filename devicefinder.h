@@ -24,6 +24,8 @@ constexpr quint16 TCP_LISTEN_PORT = 80;
 const QByteArray MESSAGE = "Hello, Device! From Finder!";
 const QByteArray SERVICE_TYPE = "_test._tcp.local.";
 const QByteArray SERVICE_NAME = "JumpWDevice";
+const QByteArray EXIT_MESSAGE = "EXIT";
+const QByteArray HEARTBEAT = "heartbeat";
 
 class NetworkUtils {
 public:
