@@ -73,9 +73,14 @@ class DeviceFinder : public QObject {
     Q_OBJECT
 
 public :
-    explicit DeviceFinder(QObject* parent=nullptr);
+    explicit DeviceFinder(const QVector<bool> m,
+                          const QString ip,
+                          const quint16 tcpPort,
+                          const quint16 udpPort,
+                          const quint16 targetUdp,
+                          QObject* parent=nullptr);
 
-    void startDiscovery(QVector<bool> &method, const QString &targetIp);
+    void startDiscovery();
 
 public slots:
     void stopDiscovery();
@@ -111,6 +116,9 @@ private:
 
     QTcpServer *tcpServer;
 
+
+    QVector<bool> method;
+    QString m_targetIp;
     // mdnsService
     QUdpSocket *udpSocket;
     QTimer *broadcastTimer;

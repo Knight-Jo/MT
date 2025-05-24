@@ -1,11 +1,21 @@
 #include "devicefinder.h"
 
-DeviceFinder::DeviceFinder(QObject *parent )
-    :QObject(parent)
+DeviceFinder::DeviceFinder(const QVector<bool> m,
+                           const QString ip,
+                           const quint16 tcpPort,
+                           const quint16 udpPort,
+                           const quint16 targetUdp,
+                           QObject *parent )
+    :
+    method(m)
+    ,m_tcp_listen(tcpPort)
+    ,m_udp_listen(udpPort)
+    ,m_targetIp(ip)
+    ,QObject(parent)
 {
+    qDebug() <<"-----DEviceFinder initial-----";
 
     tcpServer = new QTcpServer(this);
-
     udpSocket = new QUdpSocket(this);
     udpSocket->setSocketOption(QAbstractSocket::MulticastLoopbackOption, 1);
 
@@ -22,12 +32,12 @@ void DeviceFinder::stopDiscovery()
 
 
 
-void DeviceFinder::startDiscovery(QVector<bool> &method, const QString &targetIp = "")
+void DeviceFinder::startDiscovery()
 {
     qDebug()<< "startDiscovery";
-    if (!targetIp.isEmpty()) {
-        qDebug() << "startUdpScan :" << targetIp;
-        startUdpScan(targetIp);
+    if (!m_targetIp.isEmpty()) {
+        qDebug() << "startUdpScan :" << m_targetIp;
+        startUdpScan(m_targetIp);
     } else {
         if (method[0]) {
             startBroadcast();

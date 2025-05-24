@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QApplication>
 #include <QDebug>
+#include "devicefinder.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,6 +21,7 @@ public:
     ~MainWindow();
 
 private:
+    DeviceFinder *finder;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H
